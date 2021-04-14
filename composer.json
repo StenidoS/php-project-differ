@@ -9,6 +9,9 @@
             "role": "Developer"
         }
     ],
+    "bin": [
+        "bin/gendiff"
+    ],
     "require": {
         "docopt/docopt": "^1.0"
     }
