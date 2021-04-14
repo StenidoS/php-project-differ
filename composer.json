@@ -1,0 +1,13 @@
+{
+    "name": "hexlet/code",
+    "description": "Difference calculator by VK and Hexlet",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladimir Kazakov",
+            "email": "belsynth@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {}
+}
