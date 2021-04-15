@@ -23,7 +23,7 @@ function genDiff(string $firstFile, $secondFile): string
                     $acc .= "  - $key: $firstData[$key]\n";
                     $acc .= "  + $key: $secondData[$key]\n";
                 }
-            } else if (array_key_exists($key, $firstData) && !array_key_exists($key, $secondData)) {
+            } elseif (array_key_exists($key, $firstData) && !array_key_exists($key, $secondData)) {
                 $acc .= "  - $key: $firstData[$key]\n";
             } else {
                 $acc .= "  + $key: $secondData[$key]\n";
