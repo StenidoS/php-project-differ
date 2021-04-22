@@ -15,7 +15,10 @@
     "autoload": {
         "files": [
             "src/Differ.php"
-        ]
+        ],
+        "psr-4": {
+            "Differ\\Tests\\": "tests"
+        }
     },
     "require": {
         "ext-json": "*",
@@ -23,9 +26,15 @@
         "lstrojny/functional-php": "^1.17"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.6"
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpunit/phpunit": "^9.5"
     },
     "scripts": {
-        "phpcs": "phpcs"
+        "phpcs": "phpcs",
+        "test": "phpunit tests",
+        "test-coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --coverage-clover=build/logs/clover.xml tests"
+        ]
     }
 }
