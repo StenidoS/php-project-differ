@@ -19,6 +19,14 @@ class DifferTest extends TestCase
         return file_get_contents($this->getFixturePath($fileName));
     }
 
+    public function additionProvider(): array
+    {
+        return [
+            'flat json files' => ['before.json', 'after.json', 'plain.diff'],
+            'flat yaml files' => ['before.yaml', 'after.yaml', 'plain.diff']
+        ];
+    }
+
     /**
      * @dataProvider additionProvider
      */
@@ -29,12 +37,5 @@ class DifferTest extends TestCase
         $expected = $this->getFixtureContent($expected);
 
         $this->assertEquals($expected, genDiff($beforeFile, $afterFile));
-    }
-
-    public function additionProvider(): array
-    {
-        return [
-            'flat json files' => ['before.json', 'after.json', 'result.diff'],
-        ];
     }
 }
