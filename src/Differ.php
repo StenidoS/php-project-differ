@@ -2,15 +2,18 @@
 
 namespace Differ\Differ;
 
+use Exception;
+
+use function Differ\Parsers\parse;
 use function Functional\sort;
 
 function genDiff(string $beforeFile, $afterFile): string
 {
-    $beforeFileData = decodeFileContent(getFileContent($beforeFile));
-    $afterFileData = decodeFileContent(getFileContent($afterFile));
+    $beforeRawData = parse(getFileExtension($beforeFile), getFileContent($beforeFile));
+    $afterRawData = parse(getFileExtension($afterFile), getFileContent($afterFile));
 
-    $before = convertBoolValues($beforeFileData);
-    $after = convertBoolValues($afterFileData);
+    $before = convertBoolValues($beforeRawData);
+    $after = convertBoolValues($afterRawData);
 
     $keys = array_keys(array_merge($before, $after));
     $sortedKeys = sort($keys, fn($a, $b) => $a <=> $b);
@@ -36,7 +39,18 @@ function genDiff(string $beforeFile, $afterFile): string
         ''
     );
 
-    return "{\n$result}";
+    return "{\n$result}\n";
+}
+
+function getFileExtension(string $path): string
+{
+    if (file_exists($path)) {
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+    } else {
+        throw new Exception("File $path not exists.");
+    }
+
+    return $extension;
 }
 
 function getFileContent(string $path): string
@@ -44,21 +58,10 @@ function getFileContent(string $path): string
     if (file_exists($path) && is_readable($path)) {
         $fileData = file_get_contents($path);
     } else {
-        throw new \Exception("File $path not exists or not readable");
+        throw new Exception("File $path not exists or not readable.");
     }
 
     return $fileData;
-}
-
-function decodeFileContent(string $fileContent): array
-{
-    $jsonDecodedData = json_decode($fileContent, true);
-    $jsonError = json_last_error();
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new \Exception("Invalid json data. $jsonError}");
-    }
-
-    return $jsonDecodedData;
 }
 
 function convertBoolValueToString(bool $value): string
