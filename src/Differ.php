@@ -39,7 +39,7 @@ function genDiff(string $beforeFile, $afterFile): string
         ''
     );
 
-    return "{\n$result}\n";
+    return "{\n$result}";
 }
 
 function getFileExtension(string $path): string
