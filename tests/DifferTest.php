@@ -22,8 +22,10 @@ class DifferTest extends TestCase
     public function additionProvider(): array
     {
         return [
-            'flat json files' => ['before.json', 'after.json', 'plain.diff'],
-            'flat yaml files' => ['before.yaml', 'after.yaml', 'plain.diff']
+            'flat json files' => ['before.plain.json', 'after.plain.json', 'plain.diff'],
+            'flat yaml files' => ['before.plain.yaml', 'after.plain.yaml', 'plain.diff'],
+            'complex json files' => ['before.complex.json', 'after.complex.json', 'complex.diff'],
+            'complex yaml files' => ['before.complex.yaml', 'after.complex.yaml', 'complex.diff']
         ];
     }
 
