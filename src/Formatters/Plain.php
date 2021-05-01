@@ -3,11 +3,13 @@
 namespace Differ\Formatters\Plain;
 
 use Exception;
+
 use function Functional\flat_map;
 
 function getPlain(array $diffTree): string
 {
     $result = array_filter(makePlain($diffTree));
+
     return implode("\n", $result);
 }
 

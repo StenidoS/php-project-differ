@@ -3,11 +3,13 @@
 namespace Differ\Formatters\Stylish;
 
 use Exception;
+
 use function Differ\Differ\processInnerObject;
 
-function getStylish ($diffTree)
+function getStylish($diffTree)
 {
     $result = makeStylish($diffTree);
+
     return "{\n" . $result . "\n}";
 }
 
@@ -18,7 +20,7 @@ function makeStylish(array $diffTree, $indent = 0): string
         'unmodified' => 4 + $indent,
         'modified' => 2 + $indent,
         'added' => 2 + $indent,
-        'removed' => 2 + $indent
+        'removed' => 2 + $indent,
     ];
 
     $result = array_map(
