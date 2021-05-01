@@ -22,22 +22,54 @@ class DifferTest extends TestCase
     public function additionProvider(): array
     {
         return [
-            'flat json files' => ['before.plain.json', 'after.plain.json', 'plain.diff'],
-            'flat yaml files' => ['before.plain.yaml', 'after.plain.yaml', 'plain.diff'],
-            'complex json files' => ['before.complex.json', 'after.complex.json', 'complex.diff'],
-            'complex yaml files' => ['before.complex.yaml', 'after.complex.yaml', 'complex.diff']
+            'flat json files -- stylish' => [
+                'before.plain.json',
+                'after.plain.json',
+                'stylish',
+                'stylish.diff',
+            ],
+            'flat yaml files -- stylish' => [
+                'before.plain.yaml',
+                'after.plain.yaml',
+                'stylish',
+                'stylish.diff',
+            ],
+            'complex json files -- stylish' => [
+                'before.complex.json',
+                'after.complex.json',
+                'stylish',
+                'stylish.complex.diff',
+            ],
+            'complex yaml files -- stylish' => [
+                'before.complex.yaml',
+                'after.complex.yaml',
+                'stylish',
+                'stylish.complex.diff',
+            ],
+            'complex json files -- plain' => [
+                'before.complex.yaml',
+                'after.complex.yaml',
+                'plain',
+                'plain.complex.diff',
+            ],
+            'complex yaml files -- plain' => [
+                'before.complex.yaml',
+                'after.complex.yaml',
+                'plain',
+                'plain.complex.diff',
+            ],
         ];
     }
 
     /**
      * @dataProvider additionProvider
      */
-    public function testGenDiff($beforeFile, $afterFile, $expected)
+    public function testGenDiff($beforeFile, $afterFile, $formatType, $expected)
     {
         $beforeFile = $this->getFixturePath($beforeFile);
         $afterFile = $this->getFixturePath($afterFile);
         $expected = $this->getFixtureContent($expected);
 
-        $this->assertEquals($expected, genDiff($beforeFile, $afterFile));
+        $this->assertEquals($expected, genDiff($beforeFile, $afterFile, $formatType));
     }
 }
