@@ -12,6 +12,10 @@
 
 [![asciicast](https://asciinema.org/a/mLLIyNtzbRNT15eO9bojV5tng.svg)](https://asciinema.org/a/mLLIyNtzbRNT15eO9bojV5tng)
 
-## Рекурсивное сравнение Json и Yaml
+## Рекурсивное сравнение Json и Yaml - stylish форматирование вывода
 
 [![asciicast](https://asciinema.org/a/Qeke1CPw2NpBXYsrFWZcclsZf.svg)](https://asciinema.org/a/Qeke1CPw2NpBXYsrFWZcclsZf)
+
+## Рекурсивное сравнение Json - plain форматирование вывода
+
+[![asciicast](https://asciinema.org/a/GD1t8lWV31tJ5A1d9UMrToUul.svg)](https://asciinema.org/a/GD1t8lWV31tJ5A1d9UMrToUul)
