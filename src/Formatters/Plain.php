@@ -31,25 +31,6 @@ function makePlain(array $diffTree, string $parentKey = ''): array
         function ($node) use ($parentKey) {
             $type = $node['type'] ?? null;
             $key = $node['key'] ?? null;
-            $value = $node['value'] ?? null;
-            $oldValue = $node['oldValue'] ?? null;
-            $newValue = $node['newValue'] ?? null;
-
-            if (is_object($value)) {
-                $value = '[complex value]';
-            } else {
-                $value = toString($value);
-            }
-            if (is_object($oldValue)) {
-                $oldValue = '[complex value]';
-            } else {
-                $oldValue = toString($oldValue);
-            }
-            if (is_object($newValue)) {
-                $newValue = '[complex value]';
-            } else {
-                $newValue = toString($newValue);
-            }
 
             switch ($type) {
                 case 'parent':
@@ -57,8 +38,11 @@ function makePlain(array $diffTree, string $parentKey = ''): array
                 case 'unmodified':
                     return '';
                 case 'modified':
+                    $oldValue = toString($node['oldValue']);
+                    $newValue = toString($node['newValue']);
                     return "Property '{$parentKey}{$key}' was updated. From $oldValue to $newValue";
                 case 'added':
+                    $value = toString($node['value']);
                     return "Property '{$parentKey}{$key}' was added with value: $value";
                 case 'removed':
                     return "Property '{$parentKey}{$key}' was removed";
@@ -87,5 +71,9 @@ function toString($value): string
         return "'$value'";
     }
 
-    return $value;
+    if (is_numeric($value)) {
+        return (string) $value;
+    }
+
+    return '[complex value]';
 }

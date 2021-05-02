@@ -35,44 +35,34 @@ function makeStylish(array $diffTree, int $indent = 0): string
     ];
 
     $result = array_map(
-        function ($node) use ($indentMap) {
+        function ($node) use ($indentMap): string {
             $type = $node['type'] ?? null;
             $key = $node['key'] ?? null;
-            $value = $node['value'] ?? null;
-            $oldValue = $node['oldValue'] ?? null;
-            $newValue = $node['newValue'] ?? null;
 
             $countedIndent = str_repeat(' ', $indentMap[$type]);
             $countedEndIndent = str_repeat(' ', $indentMap[$type] + 2);
-
-            if (is_object($value)) {
-                $value = stylishInnerObject($value, $indentMap[$type], $countedEndIndent);
-            } else {
-                $value = toString($value);
-            }
-            if (is_object($oldValue)) {
-                $oldValue = stylishInnerObject($oldValue, $indentMap[$type], $countedEndIndent);
-            } else {
-                $oldValue = toString($oldValue);
-            }
-            if (is_object($newValue)) {
-                $newValue = stylishInnerObject($newValue, $indentMap[$type], $countedEndIndent);
-            } else {
-                $newValue = toString($newValue);
-            }
 
             switch ($type) {
                 case 'parent':
                     return "{$countedIndent}$key: {\n" . makeStylish($node['children'], $indentMap[$type])
                         . "\n{$countedIndent}}";
                 case 'unmodified':
+                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+
                     return "{$countedIndent}$key: $value";
                 case 'modified':
+                    $oldValue = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
+                    $newValue = stylishNodeValue($node['newValue'], $indentMap[$type], $countedEndIndent);
+
                     return "{$countedIndent}- $key: $oldValue\n"
                         . "{$countedIndent}+ $key: $newValue";
                 case 'added':
+                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+
                     return "{$countedIndent}+ $key: $value";
                 case 'removed':
+                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+
                     return "{$countedIndent}- $key: $value";
                 default:
                     throw new Exception('Unknown node type.');
@@ -85,15 +75,19 @@ function makeStylish(array $diffTree, int $indent = 0): string
 }
 
 /**
- * @param object $object
+ * @param mixed $value
  * @param int $indentStart
  * @param string $indentEnd
  * @return string
  * @throws Exception
  */
-function stylishInnerObject(object $object, int $indentStart, string $indentEnd): string
+function stylishNodeValue($value, int $indentStart = 0, string $indentEnd = ''): string
 {
-    return "{\n" . makeStylish(processInnerObject($object), $indentStart + 2) . "\n{$indentEnd}}";
+    if (is_object($value)) {
+        return "{\n" . makeStylish(processInnerObject($value), $indentStart + 2) . "\n{$indentEnd}}";
+    }
+
+    return toString($value);
 }
 
 /**

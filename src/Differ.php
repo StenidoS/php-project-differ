@@ -15,7 +15,7 @@ use function Functional\sort;
  * @return string
  * @throws Exception
  */
-function genDiff(string $beforeFile, string $afterFile, string $formatType): string
+function genDiff(string $beforeFile, string $afterFile, string $formatType = 'stylish'): string
 {
     $beforeData = parse(getFileExtension($beforeFile), getFileContent($beforeFile));
     $afterData = parse(getFileExtension($afterFile), getFileContent($afterFile));
@@ -128,11 +128,15 @@ function getFileExtension(string $path): string
  */
 function getFileContent(string $path): string
 {
-    if (file_exists($path) && is_readable($path)) {
+    if (is_readable($path)) {
         $fileData = file_get_contents($path);
     } else {
         throw new Exception("File $path not exists or not readable.");
     }
 
-    return $fileData;
+    if (is_string($fileData)) {
+        return $fileData;
+    } else {
+        throw new Exception("File $path content is not in string format.");
+    }
 }
