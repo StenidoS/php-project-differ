@@ -19,3 +19,7 @@
 ## Рекурсивное сравнение Json - plain форматирование вывода
 
 [![asciicast](https://asciinema.org/a/GD1t8lWV31tJ5A1d9UMrToUul.svg)](https://asciinema.org/a/GD1t8lWV31tJ5A1d9UMrToUul)
+
+## Рекурсивное сравнение Json - json форматирование вывода
+
+[![asciicast](https://asciinema.org/a/BZ8d7heHYOKybdWUskQ4ujj1E.svg)](https://asciinema.org/a/BZ8d7heHYOKybdWUskQ4ujj1E)
