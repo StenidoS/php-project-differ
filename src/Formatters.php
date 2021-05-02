@@ -8,6 +8,12 @@ use function Differ\Formatters\Stylish\getStylish;
 use function Differ\Formatters\Plain\getPlain;
 use function Differ\Formatters\Json\getJson;
 
+/**
+ * @param array $diffTree
+ * @param string $formatType
+ * @return string
+ * @throws Exception
+ */
 function format(array $diffTree, string $formatType): string
 {
     switch ($formatType) {

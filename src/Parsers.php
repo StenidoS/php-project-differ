@@ -5,7 +5,13 @@ namespace Differ\Parsers;
 use Exception;
 use Symfony\Component\Yaml\Yaml;
 
-function parse(string $extension, string $content)
+/**
+ * @param string $extension
+ * @param string $content
+ * @return object
+ * @throws Exception
+ */
+function parse(string $extension, string $content): object
 {
     switch ($extension) {
         case 'json':

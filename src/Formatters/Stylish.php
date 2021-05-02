@@ -6,14 +6,25 @@ use Exception;
 
 use function Differ\Differ\processInnerObject;
 
-function getStylish($diffTree)
+/**
+ * @param array $diffTree
+ * @return string
+ * @throws Exception
+ */
+function getStylish(array $diffTree): string
 {
     $result = makeStylish($diffTree);
 
     return "{\n" . $result . "\n}";
 }
 
-function makeStylish(array $diffTree, $indent = 0): string
+/**
+ * @param array $diffTree
+ * @param int $indent
+ * @return string
+ * @throws Exception
+ */
+function makeStylish(array $diffTree, int $indent = 0): string
 {
     $indentMap = [
         'parent' => 4 + $indent,
@@ -73,12 +84,23 @@ function makeStylish(array $diffTree, $indent = 0): string
     return implode("\n", $result);
 }
 
+/**
+ * @param object $object
+ * @param int $indentStart
+ * @param string $indentEnd
+ * @return string
+ * @throws Exception
+ */
 function stylishInnerObject(object $object, int $indentStart, string $indentEnd): string
 {
     return "{\n" . makeStylish(processInnerObject($object), $indentStart + 2) . "\n{$indentEnd}}";
 }
 
-function toString($value): string // TODO type hint
+/**
+ * @param mixed $value
+ * @return string
+ */
+function toString($value): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';

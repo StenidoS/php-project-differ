@@ -8,6 +8,13 @@ use function Differ\Parsers\parse;
 use function Differ\Formatters\format;
 use function Functional\sort;
 
+/**
+ * @param string $beforeFile
+ * @param string $afterFile
+ * @param string $formatType
+ * @return string
+ * @throws Exception
+ */
 function genDiff(string $beforeFile, string $afterFile, string $formatType): string
 {
     $beforeData = parse(getFileExtension($beforeFile), getFileContent($beforeFile));
@@ -17,6 +24,11 @@ function genDiff(string $beforeFile, string $afterFile, string $formatType): str
     return format($diffTree, $formatType);
 }
 
+/**
+ * @param object $beforeData
+ * @param object $afterData
+ * @return array
+ */
 function getDiffTree(object $beforeData, object $afterData): array
 {
     $keys = array_keys(array_merge((array) $beforeData, (array) $afterData));
@@ -65,6 +77,10 @@ function getDiffTree(object $beforeData, object $afterData): array
     );
 }
 
+/**
+ * @param object $object
+ * @return array
+ */
 function processInnerObject(object $object): array
 {
     $key = array_keys(get_object_vars($object));
@@ -89,6 +105,11 @@ function processInnerObject(object $object): array
     );
 }
 
+/**
+ * @param string $path
+ * @return string
+ * @throws Exception
+ */
 function getFileExtension(string $path): string
 {
     if (file_exists($path)) {
@@ -100,6 +121,11 @@ function getFileExtension(string $path): string
     return $extension;
 }
 
+/**
+ * @param string $path
+ * @return string
+ * @throws Exception
+ */
 function getFileContent(string $path): string
 {
     if (file_exists($path) && is_readable($path)) {
