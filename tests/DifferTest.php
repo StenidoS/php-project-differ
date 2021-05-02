@@ -47,8 +47,8 @@ class DifferTest extends TestCase
                 'stylish.complex.diff',
             ],
             'complex json files -- plain' => [
-                'before.complex.yaml',
-                'after.complex.yaml',
+                'before.complex.json',
+                'after.complex.json',
                 'plain',
                 'plain.complex.diff',
             ],
@@ -57,6 +57,18 @@ class DifferTest extends TestCase
                 'after.complex.yaml',
                 'plain',
                 'plain.complex.diff',
+            ],
+            'complex json files -- json' => [
+                'before.complex.json',
+                'after.complex.json',
+                'json',
+                'json.complex.diff',
+            ],
+            'complex yaml files -- json' => [
+                'before.complex.yaml',
+                'after.complex.yaml',
+                'json',
+                'json.complex.diff',
             ],
         ];
     }
