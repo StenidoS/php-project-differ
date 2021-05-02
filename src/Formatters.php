@@ -6,6 +6,7 @@ use Exception;
 
 use function Differ\Formatters\Stylish\getStylish;
 use function Differ\Formatters\Plain\getPlain;
+use function Differ\Formatters\Json\getJson;
 
 function format(array $diffTree, string $formatType): string
 {
@@ -14,6 +15,8 @@ function format(array $diffTree, string $formatType): string
             return getStylish($diffTree);
         case 'plain':
             return getPlain($diffTree);
+        case 'json':
+            return getJson($diffTree);
         default:
             throw new Exception("Unknown format \"$formatType\"");
     }
