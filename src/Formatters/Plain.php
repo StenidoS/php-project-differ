@@ -42,7 +42,7 @@ function makePlain(array $diffTree, string $parentKey = ''): array
                     $newValue = toString($node['newValue']);
                     return "Property '{$parentKey}{$key}' was updated. From $oldValue to $newValue";
                 case 'added':
-                    $value = toString($node['value']);
+                    $value = toString($node['newValue']);
                     return "Property '{$parentKey}{$key}' was added with value: $value";
                 case 'removed':
                     return "Property '{$parentKey}{$key}' was removed";

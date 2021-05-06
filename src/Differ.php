@@ -36,40 +36,32 @@ function getDiffTree(object $beforeData, object $afterData): array
 
     return array_map(
         function ($key) use ($beforeData, $afterData) {
-            if (!property_exists($afterData, $key)) {
-                return [
-                    'key' => $key,
-                    'type' => 'removed',
-                    'value' => $beforeData->$key,
-                ];
-            }
-            if (!property_exists($beforeData, $key)) {
-                return [
-                    'key' => $key,
-                    'type' => 'added',
-                    'value' => $afterData->$key,
-                ];
-            }
-            if (is_object($beforeData->$key) && is_object($afterData->$key)) {
+            $oldValue = $beforeData->$key ?? null;
+            $newValue = $afterData->$key ?? null;
+
+            if (is_object($oldValue) && is_object($newValue)) {
                 return [
                     'key' => $key,
                     'type' => 'parent',
                     'children' => getDiffTree($beforeData->$key, $afterData->$key),
                 ];
             }
-            if ($beforeData->$key !== $afterData->$key) {
-                return [
-                    'key' => $key,
-                    'type' => 'modified',
-                    'oldValue' => $beforeData->$key,
-                    'newValue' => $afterData->$key,
-                ];
+
+            if (!property_exists($afterData, $key)) {
+                $type = 'removed';
+            } elseif (!property_exists($beforeData, $key)) {
+                $type = 'added';
+            } elseif ($oldValue !== $newValue) {
+                $type = 'modified';
+            } else {
+                $type = 'unmodified';
             }
 
             return [
                 'key' => $key,
-                'type' => 'unmodified',
-                'value' => $beforeData->$key,
+                'type' => $type,
+                'oldValue' => is_object($oldValue) ? processValue($oldValue) : $oldValue,
+                'newValue' => is_object($newValue) ? processValue($newValue) : $newValue
             ];
         },
         $sortedKeys
@@ -77,30 +69,31 @@ function getDiffTree(object $beforeData, object $afterData): array
 }
 
 /**
- * @param object $object
+ * @param object $value
  * @return array
  */
-function processInnerObject(object $object): array
+function processValue(object $value): array
 {
-    $key = array_keys(get_object_vars($object));
+    $keys = array_keys(get_object_vars($value));
 
     return array_map(
-        function ($key) use ($object) {
-            if (is_object($object->$key)) {
+        function ($key) use ($value) {
+            if (is_object($value->$key)) {
                 return [
                     'key' => $key,
                     'type' => 'parent',
-                    'children' => processInnerObject($object->$key),
+                    'children' => processValue($value->$key),
                 ];
             }
 
             return [
                 'key' => $key,
                 'type' => 'unmodified',
-                'value' => $object->$key,
+                'oldValue' => $value->$key,
+                'newValue' => null
             ];
         },
-        $key
+        $keys
     );
 }
 

@@ -4,8 +4,6 @@ namespace Differ\Formatters\Stylish;
 
 use Exception;
 
-use function Differ\Differ\processInnerObject;
-
 /**
  * @param array $diffTree
  * @return string
@@ -47,7 +45,7 @@ function makeStylish(array $diffTree, int $indent = 0): string
                     return "{$countedIndent}$key: {\n" . makeStylish($node['children'], $indentMap[$type])
                         . "\n{$countedIndent}}";
                 case 'unmodified':
-                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+                    $value = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
 
                     return "{$countedIndent}$key: $value";
                 case 'modified':
@@ -57,11 +55,11 @@ function makeStylish(array $diffTree, int $indent = 0): string
                     return "{$countedIndent}- $key: $oldValue\n"
                         . "{$countedIndent}+ $key: $newValue";
                 case 'added':
-                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+                    $value = stylishNodeValue($node['newValue'], $indentMap[$type], $countedEndIndent);
 
                     return "{$countedIndent}+ $key: $value";
                 case 'removed':
-                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+                    $value = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
 
                     return "{$countedIndent}- $key: $value";
                 default:
@@ -74,6 +72,56 @@ function makeStylish(array $diffTree, int $indent = 0): string
     return implode("\n", $result);
 }
 
+//function makeStylish(array $diffTree, int $indent = 0): string
+//{
+//    $indentMap = [
+//        'parent' => 4 + $indent,
+//        'unmodified' => 4 + $indent,
+//        'modified' => 2 + $indent,
+//        'added' => 2 + $indent,
+//        'removed' => 2 + $indent,
+//    ];
+//
+//    $result = array_map(
+//        function ($node) use ($indentMap): string {
+//            $type = $node['type'] ?? null;
+//            $key = $node['key'] ?? null;
+//
+//            $countedIndent = str_repeat(' ', $indentMap[$type]);
+//            $countedEndIndent = str_repeat(' ', $indentMap[$type] + 2);
+//
+//            switch ($type) {
+//                case 'parent':
+//                    return "{$countedIndent}$key: {\n" . makeStylish($node['children'], $indentMap[$type])
+//                        . "\n{$countedIndent}}";
+//                case 'unmodified':
+//                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+//
+//                    return "{$countedIndent}$key: $value";
+//                case 'modified':
+//                    $oldValue = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
+//                    $newValue = stylishNodeValue($node['newValue'], $indentMap[$type], $countedEndIndent);
+//
+//                    return "{$countedIndent}- $key: $oldValue\n"
+//                        . "{$countedIndent}+ $key: $newValue";
+//                case 'added':
+//                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+//
+//                    return "{$countedIndent}+ $key: $value";
+//                case 'removed':
+//                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
+//
+//                    return "{$countedIndent}- $key: $value";
+//                default:
+//                    throw new Exception('Unknown node type.');
+//            }
+//        },
+//        $diffTree
+//    );
+//
+//    return implode("\n", $result);
+//}
+
 /**
  * @param mixed $value
  * @param int $indentStart
@@ -83,8 +131,8 @@ function makeStylish(array $diffTree, int $indent = 0): string
  */
 function stylishNodeValue($value, int $indentStart = 0, string $indentEnd = ''): string
 {
-    if (is_object($value)) {
-        return "{\n" . makeStylish(processInnerObject($value), $indentStart + 2) . "\n{$indentEnd}}";
+    if (is_array($value)) {
+        return "{\n" . makeStylish($value, $indentStart + 2) . "\n{$indentEnd}}";
     }
 
     return toString($value);
