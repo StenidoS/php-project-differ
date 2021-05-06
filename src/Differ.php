@@ -36,42 +36,41 @@ function getDiffTree(object $beforeData, object $afterData): array
 
     return array_map(
         function ($key) use ($beforeData, $afterData) {
-            if (property_exists($beforeData, $key) && property_exists($afterData, $key)) {
-                if (is_object($beforeData->$key) && is_object($afterData->$key)) {
-                    return [
-                        'key' => $key,
-                        'type' => 'parent',
-                        'children' => getDiffTree($beforeData->$key, $afterData->$key)
-                    ];
-                }
-                if ($beforeData->$key === $afterData->$key) {
-                    return [
-                        'key' => $key,
-                        'type' => 'unmodified',
-                        'value' => $beforeData->$key,
-                    ];
-                } else {
-                    return [
-                        'key' => $key,
-                        'type' => 'modified',
-                        'oldValue' => $beforeData->$key,
-                        'newValue' => $afterData->$key
-                    ];
-                }
-            }
-            if (property_exists($beforeData, $key) && !property_exists($afterData, $key)) {
+            if (!property_exists($afterData, $key)) {
                 return [
                     'key' => $key,
                     'type' => 'removed',
                     'value' => $beforeData->$key,
                 ];
-            } else {
+            }
+            if (!property_exists($beforeData, $key)) {
                 return [
                     'key' => $key,
                     'type' => 'added',
-                    'value' => $afterData->$key
+                    'value' => $afterData->$key,
                 ];
             }
+            if (is_object($beforeData->$key) && is_object($afterData->$key)) {
+                return [
+                    'key' => $key,
+                    'type' => 'parent',
+                    'children' => getDiffTree($beforeData->$key, $afterData->$key),
+                ];
+            }
+            if ($beforeData->$key !== $afterData->$key) {
+                return [
+                    'key' => $key,
+                    'type' => 'modified',
+                    'oldValue' => $beforeData->$key,
+                    'newValue' => $afterData->$key,
+                ];
+            }
+
+            return [
+                'key' => $key,
+                'type' => 'unmodified',
+                'value' => $beforeData->$key,
+            ];
         },
         $sortedKeys
     );
