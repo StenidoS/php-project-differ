@@ -16,7 +16,7 @@ class DifferTest extends TestCase
      */
     public function getFixturePath(string $fileName): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . $fileName;
+        return __DIR__ . '/fixtures/' . $fileName;
     }
 
     /**
