@@ -4,10 +4,6 @@ namespace Differ\Formatters;
 
 use Exception;
 
-use function Differ\Formatters\Stylish\getStylish;
-use function Differ\Formatters\Plain\getPlain;
-use function Differ\Formatters\Json\getJson;
-
 /**
  * @param array $diffTree
  * @param string $formatType
@@ -18,11 +14,11 @@ function format(array $diffTree, string $formatType): string
 {
     switch ($formatType) {
         case 'stylish':
-            return getStylish($diffTree);
+            return Stylish\format($diffTree);
         case 'plain':
-            return getPlain($diffTree);
+            return Plain\format($diffTree);
         case 'json':
-            return getJson($diffTree);
+            return Json\format($diffTree);
         default:
             throw new Exception("Unknown format \"$formatType\"");
     }

@@ -11,7 +11,7 @@ use function Differ\Differ\processInnerObject;
  * @return string
  * @throws Exception
  */
-function getStylish(array $diffTree): string
+function format(array $diffTree): string
 {
     $result = makeStylish($diffTree);
 

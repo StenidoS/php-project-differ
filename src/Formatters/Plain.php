@@ -11,7 +11,7 @@ use function Functional\flat_map;
  * @return string
  * @throws Exception
  */
-function getPlain(array $diffTree): string
+function format(array $diffTree): string
 {
     $result = array_filter(makePlain($diffTree));
 

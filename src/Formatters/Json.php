@@ -9,7 +9,7 @@ use Exception;
  * @return string
  * @throws Exception
  */
-function getJson(array $diffTree): string
+function format(array $diffTree): string
 {
     $result = json_encode((object) $diffTree);
     if (is_string($result)) {
