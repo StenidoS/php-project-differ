@@ -47,7 +47,7 @@ function makePlain(array $diffTree, string $parentKey = ''): array
                 case 'removed':
                     return "Property '{$parentKey}{$key}' was removed";
                 default:
-                    throw new Exception('Unknown node type.');
+                    throw new Exception("Unknown node type \"$type\".");
             }
         }
     );
