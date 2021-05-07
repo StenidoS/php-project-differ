@@ -18,52 +18,43 @@ function format(array $diffTree): string
 
 /**
  * @param array $diffTree
- * @param int $indent
+ * @param int $depth
  * @return string
  * @throws Exception
  */
-function makeStylish(array $diffTree, int $indent = 0): string
+function makeStylish(array $diffTree, int $depth = 1): string
 {
-    $indentMap = [
-        'parent' => 4 + $indent,
-        'unmodified' => 4 + $indent,
-        'modified' => 2 + $indent,
-        'added' => 2 + $indent,
-        'removed' => 2 + $indent,
-    ];
-
     $result = array_map(
-        function ($node) use ($indentMap): string {
+        function ($node) use ($depth): string {
             $type = $node['type'] ?? null;
             $key = $node['key'] ?? null;
 
-            $countedIndent = str_repeat(' ', $indentMap[$type]);
-            $countedEndIndent = str_repeat(' ', $indentMap[$type] + 2);
+            $indent = getIndent($depth);
+            $smallIndent = getIndent($depth, true);
 
             switch ($type) {
                 case 'parent':
-                    return "{$countedIndent}$key: {\n" . makeStylish($node['children'], $indentMap[$type])
-                        . "\n{$countedIndent}}";
+                    return "{$indent}$key: {\n" . makeStylish($node['children'], $depth + 1) . "\n$indent}";
                 case 'unmodified':
-                    $value = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
+                    $value = stylishNodeValue($node['oldValue'], $depth);
 
-                    return "{$countedIndent}$key: $value";
+                    return "{$indent}$key: $value";
                 case 'modified':
-                    $oldValue = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
-                    $newValue = stylishNodeValue($node['newValue'], $indentMap[$type], $countedEndIndent);
+                    $oldValue = stylishNodeValue($node['oldValue'], $depth);
+                    $newValue = stylishNodeValue($node['newValue'], $depth);
 
-                    return "{$countedIndent}- $key: $oldValue\n"
-                        . "{$countedIndent}+ $key: $newValue";
+                    return "{$smallIndent}- $key: $oldValue\n"
+                        . "{$smallIndent}+ $key: $newValue";
                 case 'added':
-                    $value = stylishNodeValue($node['newValue'], $indentMap[$type], $countedEndIndent);
+                    $value = stylishNodeValue($node['newValue'], $depth);
 
-                    return "{$countedIndent}+ $key: $value";
+                    return "{$smallIndent}+ $key: $value";
                 case 'removed':
-                    $value = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
+                    $value = stylishNodeValue($node['oldValue'], $depth);
 
-                    return "{$countedIndent}- $key: $value";
+                    return "{$smallIndent}- $key: $value";
                 default:
-                    throw new Exception('Unknown node type.');
+                    throw new Exception("Unknown node type \"$type\".");
             }
         },
         $diffTree
@@ -72,67 +63,18 @@ function makeStylish(array $diffTree, int $indent = 0): string
     return implode("\n", $result);
 }
 
-//function makeStylish(array $diffTree, int $indent = 0): string
-//{
-//    $indentMap = [
-//        'parent' => 4 + $indent,
-//        'unmodified' => 4 + $indent,
-//        'modified' => 2 + $indent,
-//        'added' => 2 + $indent,
-//        'removed' => 2 + $indent,
-//    ];
-//
-//    $result = array_map(
-//        function ($node) use ($indentMap): string {
-//            $type = $node['type'] ?? null;
-//            $key = $node['key'] ?? null;
-//
-//            $countedIndent = str_repeat(' ', $indentMap[$type]);
-//            $countedEndIndent = str_repeat(' ', $indentMap[$type] + 2);
-//
-//            switch ($type) {
-//                case 'parent':
-//                    return "{$countedIndent}$key: {\n" . makeStylish($node['children'], $indentMap[$type])
-//                        . "\n{$countedIndent}}";
-//                case 'unmodified':
-//                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
-//
-//                    return "{$countedIndent}$key: $value";
-//                case 'modified':
-//                    $oldValue = stylishNodeValue($node['oldValue'], $indentMap[$type], $countedEndIndent);
-//                    $newValue = stylishNodeValue($node['newValue'], $indentMap[$type], $countedEndIndent);
-//
-//                    return "{$countedIndent}- $key: $oldValue\n"
-//                        . "{$countedIndent}+ $key: $newValue";
-//                case 'added':
-//                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
-//
-//                    return "{$countedIndent}+ $key: $value";
-//                case 'removed':
-//                    $value = stylishNodeValue($node['value'], $indentMap[$type], $countedEndIndent);
-//
-//                    return "{$countedIndent}- $key: $value";
-//                default:
-//                    throw new Exception('Unknown node type.');
-//            }
-//        },
-//        $diffTree
-//    );
-//
-//    return implode("\n", $result);
-//}
-
 /**
  * @param mixed $value
- * @param int $indentStart
- * @param string $indentEnd
+ * @param int $depth
  * @return string
  * @throws Exception
  */
-function stylishNodeValue($value, int $indentStart = 0, string $indentEnd = ''): string
+function stylishNodeValue($value, int $depth): string
 {
     if (is_array($value)) {
-        return "{\n" . makeStylish($value, $indentStart + 2) . "\n{$indentEnd}}";
+        $indent = getIndent($depth);
+
+        return "{\n" . makeStylish($value, $depth + 1) . "\n$indent}";
     }
 
     return toString($value);
@@ -153,4 +95,19 @@ function toString($value): string
     }
 
     return $value;
+}
+
+/**
+ * @param int $depth
+ * @param bool $small
+ * @return string
+ */
+function getIndent(int $depth = 1, bool $small = false): string
+{
+    $baseIndentSize = 4;
+    if ($small) {
+        return str_repeat(' ', $baseIndentSize * $depth - 2);
+    }
+
+    return str_repeat(' ', $baseIndentSize * $depth);
 }
