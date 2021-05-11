@@ -36,48 +36,48 @@ class DifferTest extends TestCase
         return [
             'flat json files -- stylish' => [
                 'stylish.diff',
-                'before.plain.json',
-                'after.plain.json',
+                'file1.plain.json',
+                'file2.plain.json',
             ],
             'flat yaml files -- stylish' => [
                 'stylish.diff',
-                'before.plain.yaml',
-                'after.plain.yaml',
+                'file1.plain.yaml',
+                'file2.plain.yaml',
             ],
             'complex json files -- stylish' => [
                 'stylish.complex.diff',
-                'before.complex.json',
-                'after.complex.json',
+                'file1.complex.json',
+                'file2.complex.json',
                 'stylish'
             ],
             'complex yaml files -- stylish' => [
                 'stylish.complex.diff',
-                'before.complex.yaml',
-                'after.complex.yaml',
+                'file1.complex.yaml',
+                'file2.complex.yaml',
                 'stylish'
             ],
             'complex json files -- plain' => [
                 'plain.complex.diff',
-                'before.complex.json',
-                'after.complex.json',
+                'file1.complex.json',
+                'file2.complex.json',
                 'plain'
             ],
             'complex yaml files -- plain' => [
                 'plain.complex.diff',
-                'before.complex.yaml',
-                'after.complex.yaml',
+                'file1.complex.yaml',
+                'file2.complex.yaml',
                 'plain'
             ],
             'complex json files -- json' => [
                 'json.complex.diff',
-                'before.complex.json',
-                'after.complex.json',
+                'file1.complex.json',
+                'file2.complex.json',
                 'json'
             ],
             'complex yaml files -- json' => [
                 'json.complex.diff',
-                'before.complex.yaml',
-                'after.complex.yaml',
+                'file1.complex.yaml',
+                'file2.complex.yaml',
                 'json'
             ],
         ];
@@ -85,18 +85,18 @@ class DifferTest extends TestCase
 
     /**
      * @param string $expected
-     * @param string $beforeFile
-     * @param string $afterFile
+     * @param string $pathToFirstFile
+     * @param string $pathToSecondFile
      * @param string $formatType
      * @throws Exception
      * @dataProvider additionProvider
      */
-    public function testGenDiff(string $expected, string $beforeFile, string $afterFile, string $formatType = 'stylish')
+    public function testGenDiff(string $expected, string $pathToFirstFile, string $pathToSecondFile, string $formatType = 'stylish')
     {
-        $beforeFile = $this->getFixturePath($beforeFile);
-        $afterFile = $this->getFixturePath($afterFile);
+        $pathToFirstFile = $this->getFixturePath($pathToFirstFile);
+        $pathToSecondFile = $this->getFixturePath($pathToSecondFile);
         $expected = $this->getFixtureContent($expected);
 
-        $this->assertEquals($expected, genDiff($beforeFile, $afterFile, $formatType));
+        $this->assertEquals($expected, genDiff($pathToFirstFile, $pathToSecondFile, $formatType));
     }
 }

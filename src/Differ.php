@@ -9,47 +9,47 @@ use function Differ\Formatters\format;
 use function Functional\sort;
 
 /**
- * @param string $beforeFile
- * @param string $afterFile
+ * @param string $pathToFirstFile
+ * @param string $pathToSecondFile
  * @param string $formatType
  * @return string
  * @throws Exception
  */
-function genDiff(string $beforeFile, string $afterFile, string $formatType = 'stylish'): string
+function genDiff(string $pathToFirstFile, string $pathToSecondFile, string $formatType = 'stylish'): string
 {
-    $beforeData = parse(getFileExtension($beforeFile), getFileContent($beforeFile));
-    $afterData = parse(getFileExtension($afterFile), getFileContent($afterFile));
-    $diffTree = getDiffTree($beforeData, $afterData);
+    $structure1 = parse(getFileExtension($pathToFirstFile), getFileContent($pathToFirstFile));
+    $structure2 = parse(getFileExtension($pathToSecondFile), getFileContent($pathToSecondFile));
+    $diffTree = getDiffTree($structure1, $structure2);
 
     return format($diffTree, $formatType);
 }
 
 /**
- * @param object $beforeData
- * @param object $afterData
+ * @param object $structure1
+ * @param object $structure2
  * @return array
  */
-function getDiffTree(object $beforeData, object $afterData): array
+function getDiffTree(object $structure1, object $structure2): array
 {
-    $keys = array_keys(array_merge((array) $beforeData, (array) $afterData));
+    $keys = array_keys(array_merge((array) $structure1, (array) $structure2));
     $sortedKeys = sort($keys, fn($a, $b) => $a <=> $b);
 
     return array_map(
-        function ($key) use ($beforeData, $afterData) {
-            $oldValue = $beforeData->$key ?? null;
-            $newValue = $afterData->$key ?? null;
+        function ($key) use ($structure1, $structure2) {
+            $oldValue = $structure1->$key ?? null;
+            $newValue = $structure2->$key ?? null;
 
             if (is_object($oldValue) && is_object($newValue)) {
                 return [
                     'key' => $key,
                     'type' => 'parent',
-                    'children' => getDiffTree($beforeData->$key, $afterData->$key),
+                    'children' => getDiffTree($structure1->$key, $structure2->$key),
                 ];
             }
 
-            if (!property_exists($afterData, $key)) {
+            if (!property_exists($structure2, $key)) {
                 $type = 'removed';
-            } elseif (!property_exists($beforeData, $key)) {
+            } elseif (!property_exists($structure1, $key)) {
                 $type = 'added';
             } elseif ($oldValue !== $newValue) {
                 $type = 'modified';
