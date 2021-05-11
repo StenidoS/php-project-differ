@@ -11,7 +11,7 @@ use Exception;
  */
 function format(array $diffTree): string
 {
-    $result = json_encode((object) $diffTree);
+    $result = json_encode($diffTree);
     if (is_string($result)) {
         return $result;
     } else {
