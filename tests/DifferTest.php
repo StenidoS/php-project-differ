@@ -84,10 +84,10 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @param string $expected
      * @param string $beforeFile
      * @param string $afterFile
      * @param string $formatType
-     * @param string $expected
      * @throws Exception
      * @dataProvider additionProvider
      */
