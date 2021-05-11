@@ -6,13 +6,13 @@ use Exception;
 
 /**
  * @param array $diffTree
- * @param string $formatType
+ * @param string $type
  * @return string
  * @throws Exception
  */
-function format(array $diffTree, string $formatType): string
+function format(array $diffTree, string $type): string
 {
-    switch ($formatType) {
+    switch ($type) {
         case 'stylish':
             return Stylish\format($diffTree);
         case 'plain':
@@ -20,6 +20,6 @@ function format(array $diffTree, string $formatType): string
         case 'json':
             return Json\format($diffTree);
         default:
-            throw new Exception("Unknown format \"$formatType\"");
+            throw new Exception("Unknown format \"$type\"");
     }
 }
