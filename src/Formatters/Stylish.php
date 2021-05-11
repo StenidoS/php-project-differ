@@ -67,17 +67,25 @@ function makeStylish(array $diffTree, int $depth = 1): string
  * @param mixed $value
  * @param int $depth
  * @return string
- * @throws Exception
  */
 function stylishNodeValue($value, int $depth): string
 {
-    if (is_array($value)) {
-        $indent = getIndent($depth);
-
-        return "{\n" . makeStylish($value, $depth + 1) . "\n$indent}";
+    if (!is_object($value)) {
+        return toString($value);
     }
 
-    return toString($value);
+    $keys = array_keys(get_object_vars($value));
+    $result = array_map(
+        function ($key) use ($value, $depth) {
+            $indent = getIndent($depth + 1);
+
+            return "{$indent}{$key}: " . stylishNodeValue($value->$key, $depth + 1);
+        },
+        $keys
+    );
+    $endIndent = getIndent($depth);
+
+    return "{\n" . implode("\n", $result) . "\n{$endIndent}}";
 }
 
 /**

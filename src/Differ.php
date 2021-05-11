@@ -60,40 +60,11 @@ function getDiffTree(object $beforeData, object $afterData): array
             return [
                 'key' => $key,
                 'type' => $type,
-                'oldValue' => is_object($oldValue) ? processValue($oldValue) : $oldValue,
-                'newValue' => is_object($newValue) ? processValue($newValue) : $newValue
+                'oldValue' => $oldValue,
+                'newValue' => $newValue
             ];
         },
         $sortedKeys
-    );
-}
-
-/**
- * @param object $value
- * @return array
- */
-function processValue(object $value): array
-{
-    $keys = array_keys(get_object_vars($value));
-
-    return array_map(
-        function ($key) use ($value) {
-            if (is_object($value->$key)) {
-                return [
-                    'key' => $key,
-                    'type' => 'parent',
-                    'children' => processValue($value->$key),
-                ];
-            }
-
-            return [
-                'key' => $key,
-                'type' => 'unmodified',
-                'oldValue' => $value->$key,
-                'newValue' => null
-            ];
-        },
-        $keys
     );
 }
 
