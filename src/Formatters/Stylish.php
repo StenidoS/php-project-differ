@@ -105,9 +105,11 @@ function toString($value): string
 function getIndent(int $depth = 1, bool $small = false): string
 {
     $baseIndentSize = 4;
+    $times = $baseIndentSize * $depth;
+
     if ($small) {
-        return str_repeat(' ', $baseIndentSize * $depth - 2);
+        $times -= 2;
     }
 
-    return str_repeat(' ', $baseIndentSize * $depth);
+    return str_repeat(' ', $times);
 }
