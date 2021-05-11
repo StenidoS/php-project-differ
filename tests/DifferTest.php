@@ -91,8 +91,12 @@ class DifferTest extends TestCase
      * @throws Exception
      * @dataProvider additionProvider
      */
-    public function testGenDiff(string $expected, string $pathToFirstFile, string $pathToSecondFile, string $formatType = 'stylish')
-    {
+    public function testGenDiff(
+        string $expected,
+        string $pathToFirstFile,
+        string $pathToSecondFile,
+        string $formatType = 'stylish'
+    ) {
         $pathToFirstFile = $this->getFixturePath($pathToFirstFile);
         $pathToSecondFile = $this->getFixturePath($pathToSecondFile);
         $expected = $this->getFixtureContent($expected);
