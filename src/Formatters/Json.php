@@ -15,6 +15,6 @@ function format(array $diffTree): string
     if (is_string($result)) {
         return $result;
     } else {
-        throw new Exception('Incorrect Json encoding.');
+        throw new Exception("Impossible to encode data into JSON.");
     }
 }
