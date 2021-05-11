@@ -30,7 +30,7 @@ function makeStylish(array $diffTree, int $depth = 1): string
             $key = $node['key'] ?? null;
 
             $indent = getIndent($depth);
-            $smallIndent = getIndent($depth, true);
+            $smallIndent = getSmallIndent($depth);
 
             switch ($type) {
                 case 'parent':
@@ -76,7 +76,7 @@ function stylishNodeValue($value, int $depth): string
 
     $keys = array_keys(get_object_vars($value));
     $result = array_map(
-        function ($key) use ($value, $depth) {
+        function ($key) use ($value, $depth): string {
             $indent = getIndent($depth + 1);
 
             return "{$indent}{$key}: " . stylishNodeValue($value->$key, $depth + 1);
@@ -107,17 +107,21 @@ function toString($value): string
 
 /**
  * @param int $depth
- * @param bool $small
  * @return string
  */
-function getIndent(int $depth = 1, bool $small = false): string
+function getSmallIndent(int $depth): string
+{
+    return getIndent($depth, 2);
+}
+
+/**
+ * @param int $depth
+ * @param int $shift
+ * @return string
+ */
+function getIndent(int $depth = 1, int $shift = 0): string
 {
     $baseIndentSize = 4;
-    $times = $baseIndentSize * $depth;
 
-    if ($small) {
-        $times -= 2;
-    }
-
-    return str_repeat(' ', $times);
+    return str_repeat(' ', $baseIndentSize * $depth - $shift);
 }
