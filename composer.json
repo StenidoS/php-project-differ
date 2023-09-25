@@ -1,17 +1,18 @@
 {
     "name": "hexlet/code",
-    "description": "Difference calculator by VK and Hexlet",
+    "description": "Hexlet Difference Calculator",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Vladimir Kazakov",
-            "email": "belsynth@gmail.com",
-            "role": "Developer"
-        }
-    ],
     "bin": [
         "bin/gendiff"
     ],
+    "authors": [
+        {
+            "name": "Stenido",
+            "email": "os8333324@gmail.com",
+            "role": "Developer"
+        }
+    ],
+
     "autoload": {
         "files": [
             "src/Differ.php",
