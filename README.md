@@ -2,8 +2,8 @@
 
 [![Actions Status](https://github.com/StenidoS/php-project-differ/workflows/hexlet-check/badge.svg)](https://github.com/StenidoS/php-project-differ/actions)
 [![Github Actions Status](https://github.com/StenidoS/php-project-differ/workflows/CI/badge.svg)](https://github.com/StenidoS/php-project-differ/actions)
-[![Maintainability](https://api.codeclimate.com/v1/badges/9f83efce639667fe4221/maintainability)](https://github.com/StenidoS/php-project-differ/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/9f83efce639667fe4221/test_coverage)](https://github.com/StenidoS/php-project-differ/test_coverage)
+[![Maintainability]()](https://github.com/StenidoS/php-project-differ/maintainability)
+[![Test Coverage]()](https://github.com/StenidoS/php-project-differ/test_coverage)
 
 Вычислитель отличий – программа, определяющая разницу между двумя структурами данных. Это популярная задача, для решения 
 которой существует множество онлайн-сервисов. Подобный механизм используется при выводе тестов или при автоматическом 
